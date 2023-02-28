@@ -1,3 +1,5 @@
+
+
 let scene;
 let camera;
 let renderer;
@@ -22,28 +24,23 @@ function init() {
 
   document.body.appendChild(renderer.domElement);
 
+  // const controls = new OrbitControls(camera, renderer.domElement);
+
   lighting();
   createShape();
   animate();
+
+  scene.add(controls);
 }
 
 function createShape() {
   const geometry = new THREE.BoxGeometry(2, 2, 2);
-  // const texture = new THREE.TextureLoader().load(
-  //   "/media/images/textureTwo.jpg"
-  // );
-  // let material = new THREE.MeshStandardMaterial({
-  //   map: texture,
-  // });
-
-  let material = new THREE.MeshStandardMaterial({
+  const material = new THREE.MeshStandardMaterial({
     color: 0xf27405,
   });
-
-  let cube = new THREE.Mesh(geometry, material);
+  const cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
   sceneObjects.push(cube);
-
 }
 
 function animate() {
@@ -60,7 +57,7 @@ function lighting() {
   pointLight.position.set(-2, 2, 2);
   pointLight.castShadow = true;
   let ambientLight = new THREE.AmbientLight(0x404040);
-  
+
   scene.add(pointLight, ambientLight);
 
   const lightHelper = new THREE.PointLightHelper(pointLight);
