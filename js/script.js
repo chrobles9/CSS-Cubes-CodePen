@@ -1,11 +1,7 @@
-
-
-let scene;
-let camera;
-let renderer;
+let scene, camera, renderer;
 let sceneObjects = [];
 
-function init() {
+function initScene() {
   // Create Scene
   scene = new THREE.Scene();
   // Create Camera
@@ -16,27 +12,39 @@ function init() {
     1000 // Far
   );
   // change camera postition avoid view inside shape
-  camera.position.z = 6;
-
+  camera.position.z = 8;
   // create Renderer
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
-
+  // Add renderer to page
   document.body.appendChild(renderer.domElement);
-
-  // const controls = new OrbitControls(camera, renderer.domElement);
-
   lighting();
-  createShape();
+  tetra();
+  cube();
   animate();
-
-  scene.add(controls);
 }
 
-function createShape() {
-  const geometry = new THREE.BoxGeometry(2, 2, 2);
+// Smaller inner Tetrahedron Geometry
+function tetra() {
+  const geometry = new THREE.TetrahedronGeometry(2, 0);
+  var material = new THREE.MeshStandardMaterial({
+    color: 0xFF4C09,
+    transparent: true,
+    opacity: 0.5,
+  });
+  const tetra = new THREE.Mesh(geometry, material);
+  scene.add(tetra);
+  sceneObjects.push(tetra);
+
+}
+
+// Larger Outer Cube
+function cube() {
+  const geometry = new THREE.BoxGeometry(4, 4, 4);
   const material = new THREE.MeshStandardMaterial({
-    color: 0xf27405,
+    color: 0x09FFD1,
+    transparent: true,
+    opacity: 0.3,
   });
   const cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
@@ -46,22 +54,24 @@ function createShape() {
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  for (let object of sceneObjects) {
-    object.rotation.x += 0.01;
-    object.rotation.y += 0.001;
-  }
+// Rotate Tetrahedron
+  sceneObjects[0].rotation.x += 0.01;
+  sceneObjects[0].rotation.y += 0.01;
+  // Rotate cube 
+  sceneObjects[1].rotation.x -= 0.01;
+  sceneObjects[1].rotation.y -= 0.01;
 }
 
 function lighting() {
   let pointLight = new THREE.PointLight(0xffffff, 2);
-  pointLight.position.set(-2, 2, 2);
+  pointLight.position.set(-3, 3, 3);
   pointLight.castShadow = true;
-  let ambientLight = new THREE.AmbientLight(0x404040);
-
+  let ambientLight = new THREE.AmbientLight(0x404040, 2);
+  // Add lighting to cube scene
   scene.add(pointLight, ambientLight);
-
+  // Visual light helper for lighting and shadows
   const lightHelper = new THREE.PointLightHelper(pointLight);
   scene.add(lightHelper);
 }
 
-init();
+initScene();
