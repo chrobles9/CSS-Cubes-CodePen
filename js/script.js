@@ -14,7 +14,7 @@ function initScene() {
   // change camera postition avoid view inside shape
   camera.position.z = 8;
   // create Renderer
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   // Add renderer to page
   document.body.appendChild(renderer.domElement);
