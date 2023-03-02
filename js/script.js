@@ -23,6 +23,9 @@ function initScene() {
   cube();
   background();
   animate();
+  onWindowResize();
+  window.addEventListener('resize', onWindowResize, false);
+
 }
 
 // Smaller inner Tetrahedron Geometry
@@ -81,5 +84,13 @@ function lighting() {
   // const lightHelper = new THREE.PointLightHelper(pointLight);
   // scene.add(lightHelper);
 }
+
+// Camera stays in center on shape with user window resize 
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
 
 initScene();
